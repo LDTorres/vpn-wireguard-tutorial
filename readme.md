@@ -22,15 +22,15 @@ All server keys and peer data are stored locally inside the repository, while Wi
 
 ```
 .
-├── init_wg_interface.sh        # Initialize wgX (wg0, wg1…)
+├── init_interface.sh           # Initialize wgX (wg0, wg1…)
 ├── add_peer.sh                 # Create a peer + add to wgX.conf
-├── remove_wg_interface.sh      # Remove wgX (pf cleanup + peers cleanup)
+├── rm_interface.sh             # Remove wgX (pf cleanup + peers cleanup)
 ├── keys/                       # Server private/public keys
 ├── peers/                      # Peer folders (wgX-peerName)
 │   ├── wg0-iphone/
 │   ├── wg0-macbook/
 │   └── wg1-lab/
-└── README.md
+└── readme.md
 ```
 
 ---
@@ -58,7 +58,7 @@ You can create as many interfaces as you want (`wg0`, `wg1`, …).
 Example:
 
 ```bash
-./init_wg_interface.sh wg0
+./init_interface.sh wg0 51820
 ```
 
 This will:
@@ -68,7 +68,7 @@ This will:
 * Set up NAT rules in:
 
   ```
-  /etc/pf.anchors/wireguard-wg0
+  /etc/pf.anchors/wg0
   ```
 * Insert the block into `/etc/pf.conf`
 * Reload `pf`
@@ -92,9 +92,7 @@ Peers are stored inside:
 Example:
 
 ```bash
-export SERVER_ENDPOINT="YOUR_PUBLIC_IP_OR_DNS:51820"
-
-./add_peer.sh wg0 iphone
+./add_peer.sh wg0 iphone YOUR_PUBLIC_IP_OR_DNS:51820
 ```
 
 This will:
@@ -116,30 +114,20 @@ This removes **everything related to the interface**, including:
 
 * Shutting down the interface
 * Removing NAT rules
-* Removing the anchor file
-* Cleaning the WireGuard block from `/etc/pf.conf`
-* Backing up the `.conf` file
-* Deleting all folders matching `peers/wgX-*`
+* Remove the `.conf` file
+* Delete the WireGuard config file (`/opt/homebrew/etc/wireguard/wg0.conf`)
+* Remove all peer folders matching `peers/wgX-*`
+
+Manual steps: 
+
+* remove anchor file
+* clean pf.conf file WireGuard block
 
 Example:
 
 ```bash
-./remove_wg_interface.sh wg0
+./rm_interface.sh wg0
 ```
-
-This will leave backups like:
-
-```
-/opt/homebrew/etc/wireguard/wg0.conf.bak.20250102120000
-```
-
-And the peer folders:
-
-```
-peers/wg0-*
-```
-
-will be completely removed.
 
 ---
 
@@ -173,7 +161,7 @@ The scripts enforce secure permissions:
 **1. Initialize interface**
 
 ```bash
-./init_wg_interface.sh wg0
+./init_interface.sh wg0 51820
 ```
 
 **2. Bring interface up**
@@ -185,15 +173,14 @@ sudo wg-quick up wg0
 **3. Add peers**
 
 ```bash
-export SERVER_ENDPOINT="myvpn.ddns.net:51820"
-./add_peer.sh wg0 iphone
-./add_peer.sh wg0 ipad
+./add_peer.sh wg0 iphone myvpn.ddns.net:51820
+./add_peer.sh wg0 ipad myvpn.ddns.net:51820
 ```
 
 **4. Remove interface (when no longer needed)**
 
 ```bash
-./remove_wg_interface.sh wg0
+./rm_interface.sh wg0
 ```
 
 ---

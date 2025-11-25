@@ -10,8 +10,6 @@ KEYS_DIR="${KEYS_DIR:-./keys}"
 PEERS_DIR="${PEERS_DIR:-./peers}"
 VPN_BASE="10.0"
 
-# Server endpoint (EDIT THIS or export SERVER_ENDPOINT)
-
 ########################################
 
 if [[ $# -lt 3 ]]; then
@@ -27,14 +25,14 @@ SERVER_ENDPOINT="$3"
 WG_CONF_FILE="${WIREGUARD_FOLDER}/${WG_INTERFACE}.conf"
 if [[ ! -f "$WG_CONF_FILE" ]]; then
   echo "❌ ${WG_CONF_FILE} does not exist."
-  echo "   Run first: init_wireguard_interface.sh ${WG_INTERFACE}"
+  echo "   Run first: init_interface.sh ${WG_INTERFACE} <port>"
   exit 1
 fi
 
 SERVER_PUB_KEY_FILE="${KEYS_DIR}/server_public.key"
 if [[ ! -f "$SERVER_PUB_KEY_FILE" ]]; then
   echo "❌ ${SERVER_PUB_KEY_FILE} not found."
-  echo "   Run first: init_wireguard_interface.sh wg0"
+  echo "   Run first: init_interface.sh wg0 <port>"
   exit 1
 fi
 

@@ -6,6 +6,7 @@ set -euo pipefail
 ########################################
 
 WIREGUARD_FOLDER="${WIREGUARD_FOLDER:-/opt/homebrew/etc/wireguard}"
+PEERS_DIR="${PEERS_DIR:-./peers}"
 
 ########################################
 
@@ -45,7 +46,7 @@ fi
 
 if [[ -f "$WG_CONF_FILE" ]]; then
   echo "Deleting ${WG_CONF_FILE}"
-  sudo mv "$WG_CONF_FILE"
+  sudo rm "$WG_CONF_FILE"
 else
   echo "ℹ️ ${WG_CONF_FILE} not found"
 fi

@@ -30,13 +30,13 @@ echo "Initializing interface ${WG_INTERFACE}…"
 
 if ! command -v wg >/dev/null 2>&1; then
   echo "ERROR: 'wg' is not installed. On macOS:"
-  echo "  brew install tools"
+  echo "  brew install wireguard-tools"
   exit 1
 fi
 
 if ! command -v wg-quick >/dev/null 2>&1; then
   echo "ERROR: 'wg-quick' is not installed. On macOS:"
-  echo "  brew install tools"
+  echo "  brew install wireguard-tools"
   exit 1
 fi
 
